@@ -10,10 +10,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
@@ -37,6 +40,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -62,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imgAva = findViewById(R.id.img_ava);
+        printKeyHash();
 
         Glide.with(this).load("http://st.nettruyen.com/data/comics/192/tuyen-tap-truyen-ngan-cua-tac-gia-doraem-2280.jpg").error(R.drawable.ic_launcher_background).addListener(new RequestListener<Drawable>() {
             @Override
@@ -229,5 +235,23 @@ public class MainActivity extends AppCompatActivity {
         }
         return stringBuffer.toString();
 
+    }
+
+
+    private void printKeyHash() {
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "mangalaxy.manga", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.e("KeyHash:",
+                        Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e("jk", "Exception(NameNotFoundException) : " + e);
+        } catch (NoSuchAlgorithmException e) {
+            Log.e("mkm", "Exception(NoSuchAlgorithmException) : " + e);
+        }
     }
 }

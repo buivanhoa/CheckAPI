@@ -49,9 +49,9 @@ public class Reciever extends BroadcastReceiver {
                 if (response.body() == null) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         createNotification_AndroidO(context);
-                        createFileLog(hour + "", minu + "", "Lỗi API");
+                        createFileLog(hour + "", minu + "", "Lỗi API__________________");
                     } else {
-                        createFileLog(hour + "", minu + "", "Lỗi API");
+                        createFileLog(hour + "", minu + "", "Lỗi API__________________");
                         createNotification(context);
                     }
                     Log.e("test", "check finish");
@@ -133,7 +133,7 @@ public class Reciever extends BroadcastReceiver {
     }
 
     public void createFileLog(String hours, String minu, String status) {
-        Log.e("test","create log");
+        Log.e("test", "create log");
         File file = new File(Environment.getExternalStorageDirectory() + "/check_api/");
         if (!file.exists()) {
             file.mkdir();
